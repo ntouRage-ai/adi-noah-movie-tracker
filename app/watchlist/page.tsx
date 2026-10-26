@@ -39,6 +39,15 @@ export default function WatchlistPage() {
     await loadMovies();
   }
 
+  async function deleteMovie(id: string) {
+  await supabase
+    .from("watchlist")
+    .delete()
+    .eq("id", id);
+
+  await loadMovies();
+}
+
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-8">
       <h1 className="text-5xl font-bold mb-6">
@@ -63,13 +72,22 @@ export default function WatchlistPage() {
 
       <div className="space-y-3">
         {movies.map((movie) => (
-          <div
-            key={movie.id}
-            className="bg-zinc-900 p-4 rounded-xl"
-          >
-            🎥 {movie.title}
-          </div>
-        ))}
+  <div
+    key={movie.id}
+    className="bg-zinc-900 p-4 rounded-xl flex justify-between items-center"
+  >
+    <span>
+      🎥 {movie.title}
+    </span>
+
+    <button
+      onClick={() => deleteMovie(movie.id)}
+      className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg"
+    >
+      ❌
+    </button>
+  </div>
+))}
       </div>
     </main>
   );
