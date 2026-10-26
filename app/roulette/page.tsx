@@ -1,33 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 
-const movies = [
-  "Bullet Train",
-  "Catch Me If You Can",
-  "Wonder",
-  "Game Night",
-  "Transformers One",
-  "Rango",
-  "Pacific Rim",
-  "The Tomorrow War",
-];
+type WatchlistMovie = {
+  id: string;
+  title: string;
+};
 
 export default function RoulettePage() {
-  const [selectedMovie, setSelectedMovie] = useState("");
+  const [movies, setMovies] = useState<WatchlistMovie[]>([]);
+  const [selectedMovie, setSelectedMovie] =
+    useState<WatchlistMovie | null>(null);
 
-  const spinRoulette = () => {
+  useEffect(() => {
+    loadMovies();
+  }, []);
+
+  async function loadMovies() {
+    const { data, error } = await supabase
+      .from("watchlist")
+      .select("*");
+
+    if (!error && data) {
+      setMovies(data);
+    }
+  }
+
+  function spinRoulette() {
+    if (movies.length === 0) return;
+
     const randomMovie =
       movies[Math.floor(Math.random() * movies.length)];
 
     setSelectedMovie(randomMovie);
-  };
+  }
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-8">
       <h1 className="text-5xl font-bold mb-6">
         🎲 Filmroulette
       </h1>
+
+      <p className="text-zinc-400 mb-8">
+        Zufälliger Film aus eurer Watchlist
+      </p>
 
       <button
         onClick={spinRoulette}
@@ -36,6 +53,10 @@ export default function RoulettePage() {
         Überrasch mich
       </button>
 
+      <div className="mt-6 text-zinc-400">
+        Filme in Watchlist: {movies.length}
+      </div>
+
       {selectedMovie && (
         <div className="mt-8 bg-zinc-900 p-6 rounded-xl">
           <h2 className="text-2xl font-bold mb-2">
@@ -43,7 +64,7 @@ export default function RoulettePage() {
           </h2>
 
           <p className="text-xl">
-            🎥 {selectedMovie}
+            🎥 {selectedMovie.title}
           </p>
         </div>
       )}

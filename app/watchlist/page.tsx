@@ -1,15 +1,11 @@
-const watchlist = [
-  "Transformers One",
-  "Bullet Train",
-  "Rango",
-  "Game Night",
-  "Wonder",
-  "Catch Me If You Can",
-  "The Tomorrow War",
-  "Pacific Rim",
-];
+import { supabase } from "../../lib/supabase";
 
-export default function WatchlistPage() {
+export default async function WatchlistPage() {
+  const { data, error } = await supabase
+    .from("watchlist")
+    .select("*")
+    .order("created_at", { ascending: true });
+
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-8">
       <h1 className="text-5xl font-bold mb-6">
@@ -20,13 +16,19 @@ export default function WatchlistPage() {
         Alle offenen Filme von Adi & Noah
       </p>
 
+      {error && (
+        <div className="bg-red-900 p-4 rounded-xl mb-4">
+          Fehler: {error.message}
+        </div>
+      )}
+
       <div className="space-y-3">
-        {watchlist.map((movie) => (
+        {data?.map((movie) => (
           <div
-            key={movie}
+            key={movie.id}
             className="bg-zinc-900 p-4 rounded-xl"
           >
-            🎥 {movie}
+            🎥 {movie.title}
           </div>
         ))}
       </div>
