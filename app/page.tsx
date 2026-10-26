@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-8">
@@ -15,15 +17,21 @@ export default function Home() {
           <p>Noch nicht importiert</p>
         </div>
 
-        <div className="bg-zinc-900 p-4 rounded-xl">
+        <Link
+          href="/watchlist"
+          className="bg-zinc-900 p-4 rounded-xl block hover:bg-zinc-800"
+        >
           <h2 className="font-bold">📚 Watchlist</h2>
-          <p>Noch nicht importiert</p>
-        </div>
+          <p>Offene Filme anzeigen</p>
+        </Link>
 
-        <div className="bg-zinc-900 p-4 rounded-xl">
+        <Link
+          href="/roulette"
+          className="bg-zinc-900 p-4 rounded-xl block hover:bg-zinc-800"
+        >
           <h2 className="font-bold">🎲 Filmroulette</h2>
-          <p>Kommt als Nächstes</p>
-        </div>
+          <p>Film zufällig auswählen</p>
+        </Link>
       </div>
     </main>
   );
