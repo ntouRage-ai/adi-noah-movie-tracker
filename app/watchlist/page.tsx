@@ -6,7 +6,9 @@ import { supabase } from "../../lib/supabase";
 type Movie = {
   id: string;
   title: string;
+  created_at?: string;
 };
+
 
 export default function WatchlistPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -48,6 +50,19 @@ export default function WatchlistPage() {
   await loadMovies();
 }
 
+async function markAsWatched(movie: Movie) {
+  await supabase.from("movies").insert({
+    title: movie.title,
+  });
+
+  await supabase
+    .from("watchlist")
+    .delete()
+    .eq("id", movie.id);
+
+  await loadMovies();
+}
+
   return (
     <main className="min-h-screen bg-zinc-950 text-white p-8">
       <h1 className="text-5xl font-bold mb-6">
@@ -80,12 +95,22 @@ export default function WatchlistPage() {
       🎥 {movie.title}
     </span>
 
-    <button
-      onClick={() => deleteMovie(movie.id)}
-      className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg"
-    >
-      ❌
-    </button>
+   <div className="flex gap-2">
+  <button
+    onClick={() => markAsWatched(movie)}
+    className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-lg"
+  >
+    ✅
+  </button>
+
+  <button
+    onClick={() => deleteMovie(movie.id)}
+    className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg"
+  >
+    ❌
+  </button>
+</div>
+
   </div>
 ))}
       </div>
