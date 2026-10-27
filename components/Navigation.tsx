@@ -32,10 +32,17 @@ export default function Navigation() {
       </Link>
 
       <Link
-  href="/ratings"
+       href="/ratings"
+        className="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl"
+      >
+  ⭐ Bewertungen
+</Link>
+
+<Link
+  href="/ranking"
   className="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded-xl"
 >
-  ⭐ Bewertungen
+  🏆 Ranking
 </Link>
     </div>
   );
